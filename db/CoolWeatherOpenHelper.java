@@ -22,7 +22,7 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper
      * City建表语句
      */
     public static final String CREATE_CITY = "create table City (" +
-            "id integer primary key auoincrement," +
+            "id integer primary key autoincrement," +
             "city_name text," +
             "city_code text," +
             "province_id integer)";
