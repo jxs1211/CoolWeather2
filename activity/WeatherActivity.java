@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import xianjie.shen.firstlinecode.CoolWeather.service.AutoUpdateService;
 import xianjie.shen.firstlinecode.CoolWeather.util.BaseActivity;
 import xianjie.shen.firstlinecode.CoolWeather.util.Constants;
 import xianjie.shen.firstlinecode.CoolWeather.util.DataUtil;
@@ -43,6 +44,9 @@ public class WeatherActivity extends BaseActivity
         initViews();
         initDatas();
         initEvents();
+
+        Intent intent = new Intent(WeatherActivity.this, AutoUpdateService.class);
+        startService(intent);
 
     }
 
@@ -88,8 +92,8 @@ public class WeatherActivity extends BaseActivity
             @Override
             public void onClick(View view)
             {
-                Intent intent=new Intent(WeatherActivity.this,ChooseAreaActivity.class);
-                intent.putExtra("is_from_weather_activity",true);
+                Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
+                intent.putExtra("is_from_weather_activity", true);
                 startActivity(intent);
                 finish();
             }

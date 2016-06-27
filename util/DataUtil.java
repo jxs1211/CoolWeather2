@@ -110,8 +110,8 @@ public class DataUtil
             JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo");
             String city = weatherInfo.getString("city");
             String weatherCode=weatherInfo.getString("cityid");
-            String temp1=weatherInfo.getString("temp1");
-            String temp2=weatherInfo.getString("temp2");
+            String temp1=weatherInfo.getString("temp2");//temp2为温度下限
+            String temp2=weatherInfo.getString("temp1");//temp1为温度上限
             String weatherDesc =weatherInfo.getString("weather");
             String publish = weatherInfo.getString("ptime");
             saveWeatherInfo(context,city,weatherCode,temp1,temp2,weatherDesc,publish);
