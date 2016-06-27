@@ -7,11 +7,18 @@ public class Constants
 {
     public static final String ADDR = "http://www.weather.com.cn/data/list3/city.xml";
     public static final String ADDR_NO_XML = "http://www.weather.com.cn/data/list3/city";
+    public static final String ADDR_NO_HTML = "http://www.weather.com.cn/data/cityinfo/";
+
 
     public static final String TAG_BP_COOLWEATHER = "COOLWEATHER";
 
     public static String getAddrWithCode(String code)
     {
         return ADDR_NO_XML + code + ".xml";
+    }
+
+    public static String getAddrWithCodeHTML(String code)
+    {
+        return ADDR_NO_HTML + code + ".html";
     }
 }

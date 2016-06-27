@@ -1,7 +1,10 @@
 package xianjie.shen.firstlinecode.CoolWeather.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -82,6 +85,17 @@ public class ChooseAreaActivity extends BaseActivity
 
         db = CoolWeatherDB.getInstance(this);
 
+        //如果已经选择过city就直接跳转到相应的weatherActivity
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getBoolean("city_selected", false))
+        {
+            Log.e(Constants.TAG_BP_COOLWEATHER, "city_selected");
+            Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         initViews();
         initDatas();
         initEvents();
@@ -97,7 +111,7 @@ public class ChooseAreaActivity extends BaseActivity
     private void initViews()
     {
         mListView = (ListView) findViewById(R.id.lv_list);
-        mTextView = (TextView) findViewById(R.id.tv_title);
+        mTextView = (TextView) findViewById(R.id.tv_head_title);
 //        mProgressDialog = new ProgressDialog(this);
     }
 
@@ -112,10 +126,17 @@ public class ChooseAreaActivity extends BaseActivity
                 {
                     selectedProvince = mProvinceList.get(pos);
                     queryCities();
+                } else if (current_level == LEVEL_CITY)
+                {
+                    selectedCity = mCityList.get(pos);
+                    queryCounties();
                 } else if (current_level == LEVEL_COUNTY)
                 {
                     selectedCounty = mCountyList.get(pos);
-                    queryCounties();
+                    Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+                    intent.putExtra("county_code", selectedCounty.getCountyCode());
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -253,6 +274,7 @@ public class ChooseAreaActivity extends BaseActivity
             mAdapter.notifyDataSetChanged();
             mListView.setSelection(0);
             mTextView.setText(selectedCity.getCityName());
+            current_level = LEVEL_COUNTY;
         } else
         {
             queryFromServer(selectedCity.getCityCode(), "county");
@@ -296,17 +318,24 @@ public class ChooseAreaActivity extends BaseActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
+        Log.e(Constants.TAG_BP_COOLWEATHER, "onKeyDown");
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN)
         {
-            if (current_level == LEVEL_COUNTY)
+            Log.e(Constants.TAG_BP_COOLWEATHER, "in");
             {
-                queryCities();
-            } else if (current_level == LEVEL_CITY)
-            {
-                queryProvince();
-            } else
-            {
-                continueClickExitApp();
+                if (current_level == LEVEL_COUNTY)
+                {
+                    Log.e(Constants.TAG_BP_COOLWEATHER, "LEVEL_COUNTY");
+                    queryCities();
+                } else if (current_level == LEVEL_CITY)
+                {
+                    Log.e(Constants.TAG_BP_COOLWEATHER, "LEVEL_CITY");
+                    queryProvince();
+                } else
+                {
+                    Log.e(Constants.TAG_BP_COOLWEATHER, "continueClickExitApp");
+                    continueClickExitApp();
+                }
             }
         }
         return super.onKeyDown(keyCode, event);

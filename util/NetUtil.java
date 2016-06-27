@@ -55,7 +55,7 @@ public class NetUtil
     public static final int HTTPCLIENT_POST = 2;
     public static final int PARSE_XML_BY_PULL = 3;
     public static final int PARSE_XML_BY_SAX = 4;
-    public static final int PARSE_JSON_BY_JSONOBJ = 5;
+    public static final int PARSE_JSON_BY_JSONOBJECT = 5;
     public static final int PARSE_JSON_BY_GSON = 6;
 
     public interface CallBack
@@ -214,7 +214,7 @@ public class NetUtil
                         } else if (parseDataType == PARSE_XML_BY_SAX)
                         {
                             parseXMLWithSAX(response);
-                        } else if (parseDataType == PARSE_JSON_BY_JSONOBJ)
+                        } else if (parseDataType == PARSE_JSON_BY_JSONOBJECT)
                         {
                             parseJSONWithJSONObject(response);
                         } else if (parseDataType == PARSE_JSON_BY_GSON)
@@ -243,12 +243,12 @@ public class NetUtil
         Log.d(Constants.BP, "parseJSONWithGSON");
         if (isJsonObject)
         {
-            //parse jsonObject
+            //parse jsonObject to java bean
             Bean bean = gson.fromJson(response, Bean.class);
             Log.d(Constants.BP, "id=" + bean.getId() + " " + "name=" + bean.getName() + " " + "version=" + bean.getVersion());
         } else
         {
-            //parse jsonArray
+            //parse jsonArray to java beans
             List<Bean> beans = gson.fromJson(response, new TypeToken<List<Bean>>()
             {
             }.getType());
