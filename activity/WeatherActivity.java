@@ -1,5 +1,6 @@
 package xianjie.shen.firstlinecode.CoolWeather.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,6 +30,7 @@ public class WeatherActivity extends BaseActivity
     private ImageView mRefresh;
     private String mCountyCode;
     private LinearLayout mWeatherInfoLayout;
+    private ImageView mHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,8 +55,14 @@ public class WeatherActivity extends BaseActivity
         mWeatherDesc = (TextView) findViewById(R.id.tv_weather);
         mTemp1 = (TextView) findViewById(R.id.tv_temp1);
         mTemp2 = (TextView) findViewById(R.id.tv_temp2);
+        mHome = (ImageView) findViewById(R.id.iv_head_left);
         mRefresh = (ImageView) findViewById(R.id.iv_head_right);
 
+        updateWeather();
+    }
+
+    private void updateWeather()
+    {
         if (!TextUtils.isEmpty(mCountyCode))
         {// 有县级代号时就去查询天气
             mPublish.setText("同步中...");
@@ -75,7 +83,25 @@ public class WeatherActivity extends BaseActivity
 
     private void initEvents()
     {
-
+        mHome.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent=new Intent(WeatherActivity.this,ChooseAreaActivity.class);
+                intent.putExtra("is_from_weather_activity",true);
+                startActivity(intent);
+                finish();
+            }
+        });
+        mRefresh.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                updateWeather();
+            }
+        });
     }
 
     /**
@@ -159,5 +185,8 @@ public class WeatherActivity extends BaseActivity
         mTemp2.setText(prefs.getString("temp2", ""));
         mTitle.setVisibility(View.VISIBLE);
         mWeatherInfoLayout.setVisibility(View.VISIBLE);
+        mHome.setImageResource(R.drawable.home64);
+        mHome.setVisibility(View.VISIBLE);
+        mRefresh.setVisibility(View.VISIBLE);
     }
 }

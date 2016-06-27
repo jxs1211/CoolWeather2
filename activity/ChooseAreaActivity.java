@@ -76,6 +76,7 @@ public class ChooseAreaActivity extends BaseActivity
      */
     private int current_level;
     private long mExitTime;
+    private Boolean mIsFromWeatherActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -85,9 +86,11 @@ public class ChooseAreaActivity extends BaseActivity
 
         db = CoolWeatherDB.getInstance(this);
 
+        //确认是否从weatherActivity跳转过来
+        mIsFromWeatherActivity = getIntent().getBooleanExtra("is_from_weather_activity", false);
         //如果已经选择过city就直接跳转到相应的weatherActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean("city_selected", false))
+        if (prefs.getBoolean("city_selected", false) && !mIsFromWeatherActivity)
         {
             Log.e(Constants.TAG_BP_COOLWEATHER, "city_selected");
             Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
@@ -331,6 +334,10 @@ public class ChooseAreaActivity extends BaseActivity
                 {
                     Log.e(Constants.TAG_BP_COOLWEATHER, "LEVEL_CITY");
                     queryProvince();
+                } else if (mIsFromWeatherActivity)
+                {
+                    Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+                    startActivity(intent);
                 } else
                 {
                     Log.e(Constants.TAG_BP_COOLWEATHER, "continueClickExitApp");
