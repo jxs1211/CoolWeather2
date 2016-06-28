@@ -103,12 +103,9 @@ public class ChooseAreaActivity extends BaseActivity
         initDatas();
         initEvents();
 
-    }
+//        初始化有米广告
+//        AdManager.getInstance(this).init(Constants.YOUMI_APP_ID, Constants.YOUMI_APP_KEY, false);
 
-    private void initDatas()
-    {
-        mAdapter = new MyAdapter(this, dataList, R.layout.coolweather_list_item);
-        mListView.setAdapter(mAdapter);
     }
 
     private void initViews()
@@ -116,6 +113,14 @@ public class ChooseAreaActivity extends BaseActivity
         mListView = (ListView) findViewById(R.id.lv_list);
         mTextView = (TextView) findViewById(R.id.tv_head_title);
 //        mProgressDialog = new ProgressDialog(this);
+    }
+
+    private void initDatas()
+    {
+        mAdapter = new MyAdapter(this, dataList, R.layout.coolweather_list_item);
+        mListView.setAdapter(mAdapter);
+        //默认加载省的列表
+        queryProvince();
     }
 
     private void initEvents()
@@ -143,8 +148,6 @@ public class ChooseAreaActivity extends BaseActivity
                 }
             }
         });
-        //默认加载省的列表
-        queryProvince();
     }
 
     /**

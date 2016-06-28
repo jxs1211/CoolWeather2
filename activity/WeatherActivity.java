@@ -10,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.youmi.android.AdManager;
+import net.youmi.android.banner.AdSize;
+import net.youmi.android.banner.AdView;
+
 import xianjie.shen.firstlinecode.CoolWeather.service.AutoUpdateService;
 import xianjie.shen.firstlinecode.CoolWeather.util.BaseActivity;
 import xianjie.shen.firstlinecode.CoolWeather.util.Constants;
@@ -45,8 +49,16 @@ public class WeatherActivity extends BaseActivity
         initDatas();
         initEvents();
 
+        //
         Intent intent = new Intent(WeatherActivity.this, AutoUpdateService.class);
         startService(intent);
+
+        //初始化有米广告
+        AdManager.getInstance(this).init(Constants.YOUMI_APP_ID, Constants.YOUMI_APP_KEY, false);
+        //初始化广告条
+        AdView adView = new AdView(this, AdSize.FIT_SCREEN);
+        LinearLayout adLayout = (LinearLayout) findViewById(R.id.adLayout);
+        adLayout.addView(adView);
 
     }
 
@@ -62,27 +74,12 @@ public class WeatherActivity extends BaseActivity
         mHome = (ImageView) findViewById(R.id.iv_head_left);
         mRefresh = (ImageView) findViewById(R.id.iv_head_right);
 
-        updateWeather();
-    }
-
-    private void updateWeather()
-    {
-        if (!TextUtils.isEmpty(mCountyCode))
-        {// 有县级代号时就去查询天气
-            mPublish.setText("同步中...");
-            mWeatherInfoLayout.setVisibility(View.INVISIBLE);
-            mTitle.setVisibility(View.INVISIBLE);
-            queryWeatherCode(mCountyCode);
-        } else
-        {// 没有县级代号时就直接显示本地天气
-            showWeather();
-        }
+//        updateWeather();
     }
 
     private void initDatas()
     {
-
-
+        updateWeather();
     }
 
     private void initEvents()
@@ -106,6 +103,23 @@ public class WeatherActivity extends BaseActivity
                 updateWeather();
             }
         });
+    }
+
+    /**
+     * 更新天气数据
+     */
+    private void updateWeather()
+    {
+        if (!TextUtils.isEmpty(mCountyCode))
+        {// 有县级代号时就去查询天气
+            mPublish.setText("同步中...");
+            mWeatherInfoLayout.setVisibility(View.INVISIBLE);
+            mTitle.setVisibility(View.INVISIBLE);
+            queryWeatherCode(mCountyCode);
+        } else
+        {// 没有县级代号时就直接显示本地天气
+            showWeather();
+        }
     }
 
     /**
