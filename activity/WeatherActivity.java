@@ -59,7 +59,6 @@ public class WeatherActivity extends BaseActivity
         AdView adView = new AdView(this, AdSize.FIT_SCREEN);
         LinearLayout adLayout = (LinearLayout) findViewById(R.id.adLayout);
         adLayout.addView(adView);
-
     }
 
     private void initViews()

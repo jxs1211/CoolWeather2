@@ -95,8 +95,8 @@ public class ChooseAreaActivity extends BaseActivity
             Log.e(Constants.TAG_BP_COOLWEATHER, "city_selected");
             Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
             startActivity(intent);
-            finish();
-            return;
+//            finish();
+//            return;
         }
 
         initViews();
@@ -144,7 +144,7 @@ public class ChooseAreaActivity extends BaseActivity
                     Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
                     intent.putExtra("county_code", selectedCounty.getCountyCode());
                     startActivity(intent);
-                    finish();
+//                    finish();
                 }
             }
         });
@@ -311,43 +311,46 @@ public class ChooseAreaActivity extends BaseActivity
 
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        Log.e(Constants.TAG_BP_COOLWEATHER, "onDestroy");
+        super.onDestroy();
+    }
+
     /**
      * 返回键处理
      */
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
-
+//        super.onBackPressed();
+        Log.e(Constants.TAG_BP_COOLWEATHER, "onBackPressed");
+//        super.onBackPressed();
+        if (current_level == LEVEL_COUNTY)
+        {
+            Log.e(Constants.TAG_BP_COOLWEATHER, "LEVEL_COUNTY");
+            queryCities();
+        } else if (current_level == LEVEL_CITY)
+        {
+            Log.e(Constants.TAG_BP_COOLWEATHER, "LEVEL_CITY");
+            queryProvince();
+        } else if (mIsFromWeatherActivity)
+        {
+            Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+            startActivity(intent);
+            mIsFromWeatherActivity = false;
+        } else
+        {
+            Log.e(Constants.TAG_BP_COOLWEATHER, "continueClickExitApp");
+            continueClickExitApp();
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         Log.e(Constants.TAG_BP_COOLWEATHER, "onKeyDown");
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN)
-        {
-            Log.e(Constants.TAG_BP_COOLWEATHER, "in");
-            {
-                if (current_level == LEVEL_COUNTY)
-                {
-                    Log.e(Constants.TAG_BP_COOLWEATHER, "LEVEL_COUNTY");
-                    queryCities();
-                } else if (current_level == LEVEL_CITY)
-                {
-                    Log.e(Constants.TAG_BP_COOLWEATHER, "LEVEL_CITY");
-                    queryProvince();
-                } else if (mIsFromWeatherActivity)
-                {
-                    Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
-                    startActivity(intent);
-                } else
-                {
-                    Log.e(Constants.TAG_BP_COOLWEATHER, "continueClickExitApp");
-                    continueClickExitApp();
-                }
-            }
-        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -356,7 +359,7 @@ public class ChooseAreaActivity extends BaseActivity
         Log.e(Constants.TAG_BP_COOLWEATHER, System.currentTimeMillis() + "");
         if (System.currentTimeMillis() - mExitTime > 2000L)
         {//大于2s弹出toast
-            Toast.makeText(MyApplication.getContext(), R.string.exit_tips_one_more_time, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ChooseAreaActivity.this, R.string.exit_tips_one_more_time, Toast.LENGTH_SHORT).show();
             this.mExitTime = System.currentTimeMillis();// 记录下这个点击的时间点
         } else//2s内连按2次就退出app
         {
